@@ -9,7 +9,7 @@
  * To test a different listing, replace the JOB_POSTING string below.
  */
 
-const API_URL = "http://localhost:3000/api/analyze";
+const PARSE_API_URL = "http://localhost:3000/api/analyze";
 
 // ─── Paste any real job listing here ─────────────────────────────────────────
 
@@ -54,11 +54,11 @@ Compensation
 
 // ─── Run the test ─────────────────────────────────────────────────────────────
 
-async function main() {
-  console.log("🚀 Sending job posting to", API_URL);
+async function parse_main() {
+  console.log("🚀 Sending job posting to", PARSE_API_URL);
   console.log("─".repeat(60));
 
-  const res = await fetch(API_URL, {
+  const res = await fetch(PARSE_API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ jobPostingText: JOB_POSTING }),
@@ -102,7 +102,7 @@ async function main() {
   console.log(JSON.stringify(data, null, 2));
 }
 
-main().catch((err) => {
+parse_main().catch((err) => {
   console.error("Unexpected error:", err);
   process.exit(1);
 });
