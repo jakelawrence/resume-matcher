@@ -1,8 +1,9 @@
-# Resume Matcher
+# Refit Resume Matcher
 
 AI-powered resume matching app built with Next.js + Mastra.
 
 It:
+
 - Parses a raw job posting into structured JSON.
 - Uploads and parses PDF resumes.
 - Structures resume text with a Mastra agent.
@@ -19,15 +20,19 @@ It:
 ## Screenshots
 
 ### Home (Job Posting Input)
+
 ![Home page](docs/screenshots/01-home.png)
 
 ### Upload (Resume Upload + Selection)
+
 ![Upload page](docs/screenshots/02-upload.png)
 
 ### Results (Scoring Output UI)
+
 ![Results page](docs/screenshots/03-results.png)
 
 ### JSON Output (API Response)
+
 ![JSON output](docs/screenshots/04-json-output.png)
 
 ## Local Setup
