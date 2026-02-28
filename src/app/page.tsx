@@ -30,7 +30,9 @@ export default function HomePage() {
       }
 
       // Store parsed result and navigate to resume upload step
-      sessionStorage.setItem("parsedJob", JSON.stringify(json.data));
+      const serializedJob = JSON.stringify(json.data);
+      sessionStorage.setItem("parsedJob", serializedJob);
+      localStorage.setItem("parsedJob", serializedJob);
       router.push("/upload");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");

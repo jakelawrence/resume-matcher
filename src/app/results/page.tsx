@@ -39,6 +39,24 @@ interface JobPosting {
   experienceLevel: string;
 }
 
+interface LatestRunStateResponse {
+  success: boolean;
+  data?: {
+    updatedAt: string;
+    jobPosting: JobPosting;
+    scoringResults: ScoringResults;
+  };
+}
+
+function parseStoredJson<T>(raw: string | null) {
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    return null;
+  }
+}
+
 function ScoreRing({ score, size = 80 }: { score: number; size?: number }) {
   const radius = (size - 10) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -247,17 +265,59 @@ export default function ResultsPage() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   useEffect(() => {
-    const raw = sessionStorage.getItem("scoringResults");
-    const job = sessionStorage.getItem("parsedJob");
-    if (!raw) {
-      router.push("/");
-      return;
-    }
-    const parsed = JSON.parse(raw) as ScoringResults;
-    setResults(parsed);
-    // Auto-expand best match
-    setExpandedId(parsed.bestMatch.id);
-    if (job) setJobPosting(JSON.parse(job));
+    let cancelled = false;
+
+    const loadResults = async () => {
+      const sessionResults = parseStoredJson<ScoringResults>(sessionStorage.getItem("scoringResults"));
+      const sessionJob = parseStoredJson<JobPosting>(sessionStorage.getItem("parsedJob"));
+
+      const localResults = parseStoredJson<ScoringResults>(localStorage.getItem("scoringResults"));
+      const localJob = parseStoredJson<JobPosting>(localStorage.getItem("parsedJob"));
+
+      const fromBrowserResults = sessionResults ?? localResults;
+      const fromBrowserJob = sessionJob ?? localJob;
+
+      if (fromBrowserResults) {
+        if (cancelled) return;
+        setResults(fromBrowserResults);
+        setExpandedId(fromBrowserResults.bestMatch.id);
+        if (fromBrowserJob) setJobPosting(fromBrowserJob);
+
+        sessionStorage.setItem("scoringResults", JSON.stringify(fromBrowserResults));
+        localStorage.setItem("scoringResults", JSON.stringify(fromBrowserResults));
+        if (fromBrowserJob) {
+          sessionStorage.setItem("parsedJob", JSON.stringify(fromBrowserJob));
+          localStorage.setItem("parsedJob", JSON.stringify(fromBrowserJob));
+        }
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/run-state/latest", { cache: "no-store" });
+        if (!res.ok) throw new Error("No latest run state.");
+
+        const json = (await res.json()) as LatestRunStateResponse;
+        if (!json.success || !json.data) throw new Error("No latest run state.");
+        if (cancelled) return;
+
+        setResults(json.data.scoringResults);
+        setExpandedId(json.data.scoringResults.bestMatch.id);
+        setJobPosting(json.data.jobPosting);
+
+        sessionStorage.setItem("scoringResults", JSON.stringify(json.data.scoringResults));
+        localStorage.setItem("scoringResults", JSON.stringify(json.data.scoringResults));
+        sessionStorage.setItem("parsedJob", JSON.stringify(json.data.jobPosting));
+        localStorage.setItem("parsedJob", JSON.stringify(json.data.jobPosting));
+      } catch {
+        if (!cancelled) router.push("/");
+      }
+    };
+
+    loadResults();
+
+    return () => {
+      cancelled = true;
+    };
   }, [router]);
 
   if (!results) {

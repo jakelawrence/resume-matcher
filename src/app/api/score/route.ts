@@ -6,6 +6,7 @@ import path from "path";
 import { extractPdfText, getParsedResumeById, RESUMES_DIR } from "@/lib/resumes/storage";
 import { validateResumeText } from "@/lib/validation/inputGuards";
 import { requireAnthropicApiKey } from "@/lib/api/preflight";
+import { saveLatestRunState } from "@/lib/runState/storage";
 
 export const runtime = "nodejs";
 
@@ -165,6 +166,10 @@ export async function POST(req: NextRequest) {
 
     const result = await scoreResumes(parsed.data);
     const normalizedResult = normalizeScoringResult(result, parsed.data.threshold);
+    saveLatestRunState({
+      jobPosting: parsed.data.jobPosting,
+      scoringResults: normalizedResult,
+    });
 
     return NextResponse.json({ success: true, data: normalizedResult }, { status: 200 });
   } catch (err) {

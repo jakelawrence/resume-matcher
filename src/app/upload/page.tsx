@@ -131,7 +131,7 @@ export default function UploadPage() {
   async function handleScore() {
     setScoringError(null);
 
-    const parsedJob = sessionStorage.getItem("parsedJob");
+    const parsedJob = sessionStorage.getItem("parsedJob") ?? localStorage.getItem("parsedJob");
     if (!parsedJob) {
       setScoringError("Job posting data not found. Please go back to step 1.");
       return;
@@ -160,7 +160,12 @@ export default function UploadPage() {
       const json = await res.json();
       if (!res.ok || !json.success) throw new Error(json.error ?? "Scoring failed.");
 
-      sessionStorage.setItem("scoringResults", JSON.stringify(json.data));
+      sessionStorage.setItem("parsedJob", parsedJob);
+      localStorage.setItem("parsedJob", parsedJob);
+
+      const serializedResults = JSON.stringify(json.data);
+      sessionStorage.setItem("scoringResults", serializedResults);
+      localStorage.setItem("scoringResults", serializedResults);
       router.push("/results");
     } catch (err) {
       setScoringError(err instanceof Error ? err.message : "Scoring failed.");
