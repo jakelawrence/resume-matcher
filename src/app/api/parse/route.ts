@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { parseJobPosting } from "@/lib/mastra/agents/jobParserAgent";
+import { validateJobPostingText } from "@/lib/validation/inputGuards";
 
 /**
  * POST /api/parse
@@ -22,8 +23,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: "jobPostingText is required and must be a string." }, { status: 400 });
     }
 
-    if (jobPostingText.trim().length < 50) {
-      return NextResponse.json({ success: false, error: "jobPostingText is too short to be a valid job posting." }, { status: 400 });
+    const jobTextError = validateJobPostingText(jobPostingText);
+    if (jobTextError) {
+      return NextResponse.json({ success: false, error: jobTextError }, { status: 400 });
     }
 
     const jobPosting = await parseJobPosting(jobPostingText);

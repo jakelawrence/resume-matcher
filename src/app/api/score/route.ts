@@ -1,11 +1,72 @@
 import { NextRequest, NextResponse } from "next/server";
 import { scoreResumes } from "@/lib/mastra/agents/resumeScorerAgent";
-import { ScorerInputSchema } from "@/types/resumeScore";
+import { ScorerInputSchema, type ResumeScore, type ScorerOutput } from "@/types/resumeScore";
 import fs from "fs";
 import path from "path";
 import { extractPdfText, getParsedResumeById, RESUMES_DIR } from "@/lib/resumes/storage";
+import { validateResumeText } from "@/lib/validation/inputGuards";
 
 export const runtime = "nodejs";
+
+const SCORE_WEIGHTS = {
+  skills: 0.4,
+  experience: 0.3,
+  education: 0.15,
+  keywords: 0.15,
+} as const;
+
+function clampScore(value: number) {
+  return Math.min(100, Math.max(0, value));
+}
+
+function roundTo1(value: number) {
+  return Math.round(value * 10) / 10;
+}
+
+function recomputeCompositeScore(score: ResumeScore) {
+  const skills = clampScore(score.skillsMatchScore);
+  const experience = clampScore(score.experienceRelevanceScore);
+  const education = clampScore(score.educationMatchScore);
+  const keywords = clampScore(score.keywordDensityScore);
+
+  return roundTo1(
+    skills * SCORE_WEIGHTS.skills +
+      experience * SCORE_WEIGHTS.experience +
+      education * SCORE_WEIGHTS.education +
+      keywords * SCORE_WEIGHTS.keywords,
+  );
+}
+
+function normalizeScoringResult(result: ScorerOutput, threshold: number): ScorerOutput {
+  const normalizedScores = result.scores
+    .map((score) => {
+      const compositeScore = recomputeCompositeScore(score);
+      return {
+        ...score,
+        compositeScore,
+        meetsThreshold: compositeScore >= threshold,
+      };
+    })
+    .sort((a, b) => {
+      const byScore = b.compositeScore - a.compositeScore;
+      if (byScore !== 0) return byScore;
+      return a.id.localeCompare(b.id);
+    });
+
+  if (normalizedScores.length === 0) {
+    throw new Error("Scoring agent returned no score items.");
+  }
+
+  const bestMatch = normalizedScores[0];
+
+  return {
+    ...result,
+    scores: normalizedScores,
+    bestMatch,
+    bestMatchMeetsThreshold: bestMatch.meetsThreshold,
+    threshold,
+  };
+}
 
 /**
  * POST /api/score-resumes
@@ -77,6 +138,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    for (const resume of resumes) {
+      const resumeTextError = validateResumeText(resume.text, `resume "${resume.id}"`);
+      if (resumeTextError) {
+        return NextResponse.json({ success: false, error: resumeTextError }, { status: 400 });
+      }
+    }
+
     // Validate the full input against the scorer schema
     const parsed = ScorerInputSchema.safeParse({ jobPosting, resumes, threshold });
 
@@ -92,8 +160,9 @@ export async function POST(req: NextRequest) {
     }
 
     const result = await scoreResumes(parsed.data);
+    const normalizedResult = normalizeScoringResult(result, parsed.data.threshold);
 
-    return NextResponse.json({ success: true, data: result }, { status: 200 });
+    return NextResponse.json({ success: true, data: normalizedResult }, { status: 200 });
   } catch (err) {
     const message = err instanceof Error ? err.message : "An unexpected error occurred.";
     console.error("[score-resumes] Error:", message);

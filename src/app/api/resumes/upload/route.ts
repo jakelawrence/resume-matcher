@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { ensureResumesDir, extractPdfText, RESUMES_DIR, upsertParsedResume } from "@/lib/resumes/storage";
 import { parseResumeToStructured } from "@/lib/mastra/agents/resumeStructurerAgent";
+import { validateResumeText } from "@/lib/validation/inputGuards";
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 
@@ -42,6 +43,11 @@ export async function POST(req: NextRequest) {
     if (!text) {
       fs.unlinkSync(dest);
       return NextResponse.json({ success: false, error: "Could not extract text from this PDF. Please upload a text-based PDF." }, { status: 400 });
+    }
+    const resumeTextError = validateResumeText(text, "resume text from uploaded PDF");
+    if (resumeTextError) {
+      fs.unlinkSync(dest);
+      return NextResponse.json({ success: false, error: resumeTextError }, { status: 400 });
     }
     const structured = await parseResumeToStructured(text);
 
