@@ -42,3 +42,8 @@ next-env.d.ts
 
 # Temp file storage
 tmp/
+
+# Local resume uploads and parsed artifacts
+/resumes/
+parsed-resumes.json
+*.parsed.json

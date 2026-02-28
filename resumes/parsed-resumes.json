@@ -1,7 +1,322 @@
 {
   "version": 1,
-  "updatedAt": "2026-02-26T01:19:39.448Z",
+  "updatedAt": "2026-02-26T01:31:53.568Z",
   "resumes": [
+    {
+      "id": "Jake-Lawrence-Resume-2026.pdf",
+      "filename": "Jake-Lawrence-Resume-2026.pdf",
+      "sizeBytes": 115428,
+      "uploadedAt": "2026-02-26T01:31:37.136Z",
+      "text": "Jake Lawrence 909-257-5580 | jakelawrence.dev@gmail.com | linkedin.com/in/jakelawrence15 | github.com/jakelawrence Experience Back-End Developer February 2021 – Present EFavormart (YaYa Creations Inc.) El Monte, CA • Designed and implemented backend services and algorithmic workflows to optimize warehouse receiving operations, improving packaging and storage efficiency by approximately 50%. • Developed RESTful APIs for task creation, assignment, routing, and status updates, with full audit logging, reducing task processing errors by 30% and enabling real-time reporting for over 500 daily operational tasks. • Built and maintained RESTful APIs using Node.js and AWS Lambda to automate over 20 operational workflows, handling hundreds of production requests per day and saving hundreds of labor hours across a workforce of 300+ warehouse employees. • Developed and optimized complex SQL queries against MySQL databases containing 20M+ records to support operational reporting and real-time decision making. • Implemented and maintained 30+ process automation nodes within a Spring-based workflow engine, enabling reliable execution of business-critical processes across multiple warehouse facilities. • Collaborated with operations and engineering stakeholders to translate warehouse requirements into scalable, production-ready backend systems. Technical Skills Languages: JavaScript, TypeScript, SQL, Python, PHP, Java (Nashorn / JVM-based execution) Backend & Cloud: Node.js, AWS (Lambda, EC2, DynamoDB), RESTful APIs, PM2 Databases & Data: MySQL, SQLite, Snowflake, SQL Server, Data Modeling, Query Optimization Frontend Frameworks: React, Next.js AI & Agents: Anthropic Claude, Mastra, Vercel AI SDK, LLM Tool Use, Streaming Inference DevOps & Tooling: Git (GitHub/GitLab workflows), npm, Docker, CI/CD Testing & Observability: Jest, Kibana Architecture & Concepts: Microservices, Serverless Architecture, Authentication, Workflow Automation Education California State University, Fullerton Fullerton, CA Bachelor of Science in Computer Science • Graduated in the CSUF Honors Program (top 1% of students). • Ranked top 5% in a graduate-level Algorithms course as an undergraduate. Projects DynamoStudio | Next.js, TypeScript, AWS SDK v3, Mastra, Anthropic Claude Link to Project • Built a full-stack DynamoDB management GUI with an integrated AI assistant powered by Anthropic Claude via the Mastra agent framework, enabling natural language schema explanation, query code generation, and index optimization suggestions directly in the UI. • Designed a multi-tool AI agent with three purpose-built tools — live schema introspection, code generation across 6 languages (TypeScript, Python, Go, Java, Rust, JavaScript), and structured optimization analysis — grounded in real table data fetched at query time. • Implemented a streaming chat interface using the Vercel AI SDK with active table context injection, allowing the agent to answer questions about the currently viewed table without user disambiguation. • Implemented full item-level CRUD with bulk operations, real-time approximate record counts via DescribeTable, and a JSON attribute viewer for nested map and list types. You Should Watch | Next.js, TypeScript, Node.js, REST APIs Link to Project • Built a web application that helps users discover new movies based on films they already enjoy. • Designed an API-driven recommendation flow where users select movies and receive curated suggestions. • Implemented a scalable frontend architecture using Next.js and TypeScript to support dynamic user interactions. • Structured the application to allow future expansion for user accounts, saved recommendations, and social features.",
+      "structured": {
+        "jobTitle": "Back-End Developer",
+        "company": null,
+        "location": null,
+        "employmentType": "full_time",
+        "roleSummary": "Experienced backend developer with a strong track record in building scalable RESTful APIs, workflow automation systems, and data-driven solutions. Demonstrated expertise in Node.js, AWS serverless architecture, and database optimization across high-volume production environments. Proven ability to translate operational requirements into production-ready systems that drive measurable efficiency improvements.",
+        "experienceLevel": "mid",
+        "experienceYearsMin": 4,
+        "experienceYearsMax": null,
+        "educationLevel": "bachelors",
+        "educationFields": [
+          "Computer Science"
+        ],
+        "skills": [
+          {
+            "name": "JavaScript",
+            "category": "language",
+            "required": true,
+            "yearsRequired": 4
+          },
+          {
+            "name": "TypeScript",
+            "category": "language",
+            "required": true,
+            "yearsRequired": null
+          },
+          {
+            "name": "SQL",
+            "category": "language",
+            "required": true,
+            "yearsRequired": 4
+          },
+          {
+            "name": "Python",
+            "category": "language",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "PHP",
+            "category": "language",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "Java",
+            "category": "language",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "Node.js",
+            "category": "technical",
+            "required": true,
+            "yearsRequired": 4
+          },
+          {
+            "name": "AWS Lambda",
+            "category": "technical",
+            "required": true,
+            "yearsRequired": 4
+          },
+          {
+            "name": "AWS EC2",
+            "category": "technical",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "AWS DynamoDB",
+            "category": "technical",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "RESTful APIs",
+            "category": "technical",
+            "required": true,
+            "yearsRequired": 4
+          },
+          {
+            "name": "MySQL",
+            "category": "technical",
+            "required": true,
+            "yearsRequired": 4
+          },
+          {
+            "name": "SQLite",
+            "category": "technical",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "Snowflake",
+            "category": "technical",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "SQL Server",
+            "category": "technical",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "Data Modeling",
+            "category": "technical",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "Query Optimization",
+            "category": "technical",
+            "required": true,
+            "yearsRequired": null
+          },
+          {
+            "name": "React",
+            "category": "technical",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "Next.js",
+            "category": "technical",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "Anthropic Claude",
+            "category": "tool",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "Mastra",
+            "category": "tool",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "Vercel AI SDK",
+            "category": "tool",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "Git",
+            "category": "tool",
+            "required": true,
+            "yearsRequired": null
+          },
+          {
+            "name": "Docker",
+            "category": "tool",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "CI/CD",
+            "category": "technical",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "Jest",
+            "category": "tool",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "Kibana",
+            "category": "tool",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "Microservices",
+            "category": "technical",
+            "required": true,
+            "yearsRequired": null
+          },
+          {
+            "name": "Serverless Architecture",
+            "category": "technical",
+            "required": true,
+            "yearsRequired": null
+          },
+          {
+            "name": "Workflow Automation",
+            "category": "domain",
+            "required": true,
+            "yearsRequired": 4
+          },
+          {
+            "name": "PM2",
+            "category": "tool",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "Spring",
+            "category": "technical",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "AWS SDK",
+            "category": "technical",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "LLM Tool Use",
+            "category": "technical",
+            "required": false,
+            "yearsRequired": null
+          },
+          {
+            "name": "Streaming Inference",
+            "category": "technical",
+            "required": false,
+            "yearsRequired": null
+          }
+        ],
+        "requiredSkills": [
+          "JavaScript",
+          "TypeScript",
+          "SQL",
+          "Node.js",
+          "AWS Lambda",
+          "RESTful APIs",
+          "MySQL",
+          "Query Optimization",
+          "Git",
+          "Microservices",
+          "Serverless Architecture",
+          "Workflow Automation"
+        ],
+        "niceToHaveSkills": [
+          "Python",
+          "PHP",
+          "Java",
+          "AWS EC2",
+          "AWS DynamoDB",
+          "SQLite",
+          "Snowflake",
+          "SQL Server",
+          "Data Modeling",
+          "React",
+          "Next.js",
+          "Anthropic Claude",
+          "Mastra",
+          "Vercel AI SDK",
+          "Docker",
+          "CI/CD",
+          "Jest",
+          "Kibana",
+          "PM2",
+          "Spring",
+          "AWS SDK",
+          "LLM Tool Use",
+          "Streaming Inference"
+        ],
+        "keywords": [
+          "Backend",
+          "RESTful API",
+          "Node.js",
+          "AWS Lambda",
+          "MySQL",
+          "SQL",
+          "Workflow Automation",
+          "Microservices",
+          "Serverless",
+          "TypeScript",
+          "JavaScript",
+          "Query Optimization",
+          "DynamoDB",
+          "React",
+          "Next.js",
+          "AI Agent",
+          "Claude",
+          "Docker",
+          "CI/CD",
+          "Git",
+          "Data Modeling",
+          "Process Automation",
+          "Spring",
+          "Audit Logging",
+          "Real-time Reporting",
+          "Task Management",
+          "Operational Efficiency"
+        ],
+        "responsibilities": [
+          "Designed and implemented backend services and algorithmic workflows to optimize warehouse operations",
+          "Developed RESTful APIs for task management with full audit logging and real-time reporting capabilities",
+          "Built and maintained AWS Lambda-based automation workflows handling hundreds of daily production requests",
+          "Developed and optimized complex SQL queries against databases with 20M+ records",
+          "Implemented and maintained 30+ process automation nodes within Spring-based workflow engine",
+          "Collaborated with cross-functional stakeholders to translate requirements into scalable backend systems",
+          "Built full-stack applications with integrated AI assistants using modern frameworks",
+          "Designed API-driven architectures supporting dynamic user interactions and future scalability"
+        ],
+        "salaryMin": null,
+        "salaryMax": null,
+        "currency": null
+      },
+      "parsedAt": "2026-02-26T01:31:53.566Z"
+    },
     {
       "id": "my-resume.pdf",
       "filename": "my-resume.pdf",
