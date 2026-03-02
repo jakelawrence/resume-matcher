@@ -2,6 +2,7 @@ import { Mastra } from "@mastra/core";
 import { jobParserAgent } from "./agents/jobParserAgent";
 import { resumeScorerAgent } from "./agents/resumeScorerAgent";
 import { resumeStructurerAgent } from "./agents/resumeStructurerAgent";
+import { resumeLatexConverterAgent } from "./agents/resumeLatexConverterAgent";
 import { EvaluateCandidatesWorkflow } from "./workflows/evaluateCandidatesWorkflow";
 
 /**
@@ -18,6 +19,7 @@ export const mastra = new Mastra({
     jobParserAgent,
     resumeScorerAgent,
     resumeStructurerAgent,
+    resumeLatexConverterAgent,
     // resumeWriterAgent,  ← add in Step 3
   },
   workflows: {

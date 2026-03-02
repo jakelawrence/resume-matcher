@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { getParsedResumes } from "@/lib/resumes/storage";
 
 const RESUMES_DIR = path.join(process.cwd(), "resumes");
 
@@ -12,15 +13,20 @@ export async function GET() {
     }
 
     const files = fs.readdirSync(RESUMES_DIR).filter((f) => f.endsWith(".pdf"));
+    const parsedResumes = getParsedResumes();
+    const parsedById = new Map(parsedResumes.map((resume) => [resume.id, resume]));
 
     const resumes = files.map((filename) => {
       const filePath = path.join(RESUMES_DIR, filename);
       const stats = fs.statSync(filePath);
+      const parsed = parsedById.get(filename);
       return {
         id: filename,
         filename,
         sizeBytes: stats.size,
         uploadedAt: stats.mtime.toISOString(),
+        isEditable: parsed?.isEditable ?? false,
+        hasLatex: Boolean(parsed?.latexPath),
       };
     });
 

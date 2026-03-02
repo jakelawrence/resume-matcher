@@ -8,6 +8,8 @@ interface StoredResume {
   filename: string;
   sizeBytes: number;
   uploadedAt: string;
+  isEditable: boolean;
+  hasLatex: boolean;
 }
 
 function formatBytes(bytes: number) {
@@ -33,6 +35,7 @@ export default function UploadPage() {
   const [loadingList, setLoadingList] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadAsEditable, setUploadAsEditable] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isScoring, setIsScoring] = useState(false);
   const [scoringError, setScoringError] = useState<string | null>(null);
@@ -79,7 +82,7 @@ export default function UploadPage() {
 
   // ── Upload logic ─────────────────────────────────────────────────────────
   async function uploadFile(file: File) {
-    if (!file.name.endsWith(".pdf")) {
+    if (!file.name.toLowerCase().endsWith(".pdf")) {
       setUploadError("Only PDF files are accepted.");
       return;
     }
@@ -94,6 +97,7 @@ export default function UploadPage() {
     try {
       const form = new FormData();
       form.append("resume", file);
+      form.append("editable", String(uploadAsEditable));
 
       const res = await fetch("/api/resumes/upload", {
         method: "POST",
@@ -242,6 +246,28 @@ export default function UploadPage() {
           </div>
         </button>
 
+        <div className="upload-options" role="group" aria-label="Upload options">
+          <span className="upload-options-label">Editable conversion</span>
+          <div className="toggle-group">
+            <button
+              type="button"
+              className={`toggle-btn ${!uploadAsEditable ? "toggle-btn--active" : ""}`}
+              onClick={() => setUploadAsEditable(false)}
+              disabled={uploading}
+            >
+              No
+            </button>
+            <button
+              type="button"
+              className={`toggle-btn ${uploadAsEditable ? "toggle-btn--active" : ""}`}
+              onClick={() => setUploadAsEditable(true)}
+              disabled={uploading}
+            >
+              Yes
+            </button>
+          </div>
+        </div>
+
         {uploadError && (
           <div className="error-banner" role="alert">
             <span className="error-icon">!</span>
@@ -320,6 +346,10 @@ export default function UploadPage() {
                           <span className="resume-meta">
                             {formatBytes(resume.sizeBytes)} · Uploaded {formatDate(resume.uploadedAt)}
                           </span>
+                        </div>
+
+                        <div className={`editable-pill ${resume.isEditable ? "editable-pill--on" : "editable-pill--off"}`}>
+                          {resume.isEditable ? (resume.hasLatex ? "Editable (LaTeX ready)" : "Editable") : "Locked PDF"}
                         </div>
 
                         <div className={`selection-pill ${isChecked ? "selection-pill--on" : "selection-pill--off"}`}>
@@ -507,6 +537,46 @@ export default function UploadPage() {
           letter-spacing: 0.04em; color: var(--ink-3);
         }
 
+        .upload-options {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+        }
+        .upload-options-label {
+          font-family: var(--mono);
+          font-size: 11px;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          color: var(--ink-3);
+        }
+        .toggle-group {
+          display: inline-flex;
+          border: 1px solid var(--border);
+          border-radius: 2px;
+          overflow: hidden;
+          background: #fff;
+        }
+        .toggle-btn {
+          border: none;
+          background: transparent;
+          color: var(--ink-3);
+          padding: 6px 12px;
+          font-family: var(--mono);
+          font-size: 11px;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          cursor: pointer;
+        }
+        .toggle-btn:disabled {
+          cursor: not-allowed;
+          opacity: 0.6;
+        }
+        .toggle-btn--active {
+          background: var(--ink);
+          color: var(--paper);
+        }
+
         /* ── Card ───────────────────────────────────────────── */
         .card {
           background: #fff;
@@ -646,6 +716,24 @@ export default function UploadPage() {
           background: var(--paper-2);
           color: var(--ink-3);
           border: 1px solid var(--border);
+        }
+        .editable-pill {
+          font-family: var(--mono); font-size: 10px;
+          letter-spacing: 0.04em;
+          padding: 3px 8px;
+          border-radius: 2px;
+          border: 1px solid var(--border);
+          flex-shrink: 0;
+          white-space: nowrap;
+        }
+        .editable-pill--on {
+          background: #e7f7ef;
+          border-color: #b7e4c7;
+          color: #166534;
+        }
+        .editable-pill--off {
+          background: var(--paper-2);
+          color: var(--ink-3);
         }
 
         /* ── Score footer ───────────────────────────────────── */
