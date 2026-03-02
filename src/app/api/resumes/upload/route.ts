@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import { ensureResumesDir, extractPdfText, RESUMES_DIR, upsertParsedResume } from "@/lib/resumes/storage";
-import { parseResumeToStructured } from "@/lib/mastra/agents/resumeStructurerAgent";
+import { evaluateCandidates } from "@/lib/mastra/workflows/evaluateCandidatesWorkflow";
 import { validateResumeText } from "@/lib/validation/inputGuards";
 import { requireAnthropicApiKey } from "@/lib/api/preflight";
 
@@ -53,7 +53,17 @@ export async function POST(req: NextRequest) {
       fs.unlinkSync(dest);
       return NextResponse.json({ success: false, error: resumeTextError }, { status: 400 });
     }
-    const structured = await parseResumeToStructured(text);
+
+    const workflowResult = await evaluateCandidates({
+      operation: "parseResumes",
+      resumes: [{ id: filename, text }],
+    });
+
+    const structured = workflowResult.structuredResumes[0]?.structuredResume;
+    if (!structured) {
+      fs.unlinkSync(dest);
+      throw new Error("Workflow did not return a structured resume.");
+    }
 
     const stats = fs.statSync(dest);
     const storedResume = {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { parseJobPosting } from "@/lib/mastra/agents/jobParserAgent";
+import { evaluateCandidates } from "@/lib/mastra/workflows/evaluateCandidatesWorkflow";
 import { validateJobPostingText } from "@/lib/validation/inputGuards";
 import { requireAnthropicApiKey } from "@/lib/api/preflight";
 
@@ -32,9 +32,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: jobTextError }, { status: 400 });
     }
 
-    const jobPosting = await parseJobPosting(jobPostingText);
+    const result = await evaluateCandidates({
+      operation: "parseJob",
+      jobPostingText,
+    });
 
-    return NextResponse.json({ success: true, data: jobPosting }, { status: 200 });
+    if (!result.jobPosting) {
+      throw new Error("Workflow did not return a parsed job posting.");
+    }
+
+    return NextResponse.json({ success: true, data: result.jobPosting }, { status: 200 });
   } catch (err) {
     const message = err instanceof Error ? err.message : "An unexpected error occurred.";
     console.error("[parse] Error:", message);
